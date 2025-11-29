@@ -147,12 +147,30 @@
 }
 
 /* Responsive for Article */
-@media (max-width: 768px) {
+@media (max-width: 1090px) {
     .article-hero h1 {
         font-size: 2.5rem;
     }
+
+    .article-hero {
+        height: 50vh;
+    }
     
     .article-content {
-        padding: 3rem 1.5rem;
+        padding: 2rem 1rem;
+        font-size: 1rem;
+    }
+
+    .article-content h2 {
+        font-size: 2rem;
+    }
+
+    .article-content blockquote {
+        font-size: 1.1rem;
+        padding-left: 1.5rem;
+    }
+
+    .bibliography h3 {
+        font-size: 1.3rem;
     }
 }
