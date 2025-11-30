@@ -35,27 +35,25 @@ window.addEventListener('scroll', function() {
     header.classList.toggle('scrolled', window.scrollY > 50);
 });
 
-// Scroll Reveal Animation
-window.addEventListener('scroll', reveal);
+// Scroll Reveal Animation using Intersection Observer
+const observerOptions = {
+    root: null,
+    rootMargin: '0px 0px -100px 0px', // Equivalent to the previous 150px offset logic roughly
+    threshold: 0
+};
 
-function reveal() {
-    var reveals = document.querySelectorAll('.reveal');
-
-    for (var i = 0; i < reveals.length; i++) {
-        var windowheight = window.innerHeight;
-        var revealtop = reveals[i].getBoundingClientRect().top;
-        var revealpoint = 150;
-
-        if (revealtop < windowheight - revealpoint) {
-            reveals[i].classList.add('active');
+const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+        if (entry.isIntersecting) {
+            entry.target.classList.add('active');
         } else {
-            reveals[i].classList.remove('active');
+            entry.target.classList.remove('active');
         }
-    }
-}
+    });
+}, observerOptions);
 
-// Trigger once on load
-reveal();
+const reveals = document.querySelectorAll('.reveal');
+reveals.forEach(el => observer.observe(el));
 
 // Hamburger Menu Toggle
 const hamburger = document.getElementById('hamburger');
@@ -182,3 +180,49 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
+    // Reveal subtitle underline after fonts are loaded and set exact width
+    function revealSubtitleUnderline() {
+        const subtitle = document.querySelector('.subtitle');
+        if (!subtitle) return;
+
+        const setWidth = () => {
+            // measure the rendered width of the subtitle text as tightly as possible
+            try {
+                const range = document.createRange();
+                range.selectNodeContents(subtitle);
+                const rect = range.getBoundingClientRect();
+                const w = Math.max(0, Math.round(rect.width));
+                subtitle.style.setProperty('--underline-w', `${w}px`);
+            } catch (err) {
+                // fallback to element bounding box
+                const rect = subtitle.getBoundingClientRect();
+                const w = Math.round(rect.width);
+                subtitle.style.setProperty('--underline-w', `${w}px`);
+            }
+        };
+
+        const apply = () => {
+            setWidth();
+            // small timeout to let layout settle
+            setTimeout(() => subtitle.classList.add('revealed'), 60);
+        };
+
+        // Wait for fonts to be ready if available
+        if (document.fonts && document.fonts.ready) {
+            document.fonts.ready.then(apply).catch(apply);
+        } else {
+            window.addEventListener('load', apply);
+        }
+
+        // Recompute on resize / orientation change
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                setWidth();
+            }, 120);
+        });
+    }
+
+    revealSubtitleUnderline();
