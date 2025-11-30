@@ -273,3 +273,12 @@
         font-size: 1.3rem;
     }
 }
+.hero-odalisque {
+    background-position: center top;
+}
+
+@media (max-width: 830px) {
+    .hero-odalisque {
+        background-position: 20% center !important;
+    }
+}
