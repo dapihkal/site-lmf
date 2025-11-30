@@ -75,6 +75,105 @@
     margin-bottom: 2rem;
 }
 
+.article-content a {
+    color: var(--accent-color);
+    text-decoration: none;
+    transition: color 0.3s ease, text-decoration 0.3s ease;
+}
+
+.article-content a:hover {
+    color: var(--accent-color);
+    text-decoration: underline;
+}
+
+[data-tooltip] {
+    position: relative;
+}
+
+/* Tooltip JS Style */
+#custom-tooltip {
+    position: absolute;
+    background: rgba(10, 10, 10, 0.95);
+    backdrop-filter: blur(10px);
+    color: var(--text-color);
+    padding: 1rem;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    max-width: 300px;
+    width: max-content;
+    z-index: 10000;
+    border: 1px solid var(--accent-color);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.2s ease, visibility 0.2s;
+    pointer-events: none;
+    text-align: left;
+    --arrow-left: 50%;
+}
+
+#custom-tooltip.active {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+}
+
+#custom-tooltip a {
+    color: var(--accent-color);
+    text-decoration: underline;
+}
+
+#custom-tooltip a:hover {
+    color: #fff;
+}
+
+/* Arrow Border */
+#custom-tooltip::before {
+    content: '';
+    position: absolute;
+    left: var(--arrow-left);
+    transform: translateX(-50%);
+    border-width: 8px;
+    border-style: solid;
+    pointer-events: none;
+}
+
+/* Arrow Background */
+#custom-tooltip::after {
+    content: '';
+    position: absolute;
+    left: var(--arrow-left);
+    transform: translateX(-50%);
+    border-width: 7px;
+    border-style: solid;
+    pointer-events: none;
+}
+
+/* Top Tooltip (Arrow points down) */
+#custom-tooltip:not(.bottom)::before {
+    top: 100%;
+    border-color: var(--accent-color) transparent transparent transparent;
+}
+#custom-tooltip:not(.bottom)::after {
+    top: 100%;
+    border-color: #0a0a0a transparent transparent transparent;
+    margin-top: -1px;
+}
+
+/* Bottom Tooltip (Arrow points up) */
+#custom-tooltip.bottom::before {
+    bottom: 100%;
+    border-color: transparent transparent var(--accent-color) transparent;
+}
+#custom-tooltip.bottom::after {
+    bottom: 100%;
+    border-color: transparent transparent #0a0a0a transparent;
+    margin-bottom: -1px;
+}
+
 .article-content blockquote {
     border-left: 3px solid var(--accent-color);
     padding-left: 2rem;
