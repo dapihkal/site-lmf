@@ -226,3 +226,58 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     revealSubtitleUnderline();
+
+// Lightbox Functionality
+function initLightbox() {
+    // Create lightbox elements
+    const overlay = document.createElement('div');
+    overlay.className = 'lightbox-overlay';
+    overlay.innerHTML = `
+        <div class="lightbox-content">
+            <span class="lightbox-close">&times;</span>
+            <img class="lightbox-img" src="" alt="">
+            <div class="lightbox-caption"></div>
+        </div>
+    `;
+    document.body.appendChild(overlay);
+
+    const lightboxImg = overlay.querySelector('.lightbox-img');
+    const lightboxCaption = overlay.querySelector('.lightbox-caption');
+    const closeBtn = overlay.querySelector('.lightbox-close');
+
+    // Event delegation for images in articles
+    document.addEventListener('click', (e) => {
+        if (e.target.tagName === 'IMG' && e.target.closest('.article-content')) {
+            const img = e.target;
+            const figcaption = img.closest('figure')?.querySelector('figcaption');
+            
+            lightboxImg.src = img.src;
+            lightboxImg.alt = img.alt;
+            lightboxCaption.textContent = figcaption ? figcaption.textContent : '';
+            
+            overlay.style.display = 'flex';
+            document.body.style.overflow = 'hidden'; // Prevent background scroll
+        }
+    });
+
+    // Close lightbox
+    const closeLightbox = () => {
+        overlay.style.display = 'none';
+        document.body.style.overflow = ''; // Restore scroll
+    };
+
+    closeBtn.addEventListener('click', closeLightbox);
+    overlay.addEventListener('click', (e) => {
+        if (e.target === overlay) closeLightbox();
+    });
+
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && overlay.style.display === 'flex') {
+            closeLightbox();
+        }
+    });
+}
+
+// Initialize lightbox when DOM is ready
+document.addEventListener('DOMContentLoaded', initLightbox);
